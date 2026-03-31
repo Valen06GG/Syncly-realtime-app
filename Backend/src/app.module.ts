@@ -6,18 +6,16 @@ import { BoardsModule } from './boards/boards.module';
 import { ColumnsModule } from './columns/columns.module';
 import { TasksModule } from './tasks/tasks.module';
 import { SocketsModule } from './sockets/sockets.module';
+import { databaseConfig } from './config/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'Valen06GG',
-      database: 'syncly',
-      autoLoadEntities: true,
-      synchronize: true, 
+    TypeOrmModule.forRootAsync({
+      useFactory: () => databaseConfig,
+    }),
+    ConfigModule.forRoot({
+      isGlobal: true,
     }),
     AuthModule,
     UsersModule,
