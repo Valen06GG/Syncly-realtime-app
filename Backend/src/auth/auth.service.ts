@@ -16,7 +16,7 @@ export class AuthService {
 
         private jwtService: JwtService,
 
-        private usersService: UsersService
+        private usersService: UsersService,
     ) {}
 
     async register(dto: RegisterDto) {
@@ -25,13 +25,26 @@ export class AuthService {
         return this.usersService.create(dto.email, hashed);
     }
 
-    async login(dto: LoginDto) {
-        const user = await this.validateUser(dto.email, dto.password);
-        const payload = { sub: user.id, email: user.email };
+    async login(email: string, password: string) {
+        const user = await this.usersService.findByEmail(email);
+        if (!user) {
+            throw new UnauthorizedException('Credenciales inválidas');
+        }
+
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            throw new UnauthorizedException('Credenciales inválidas');
+        }
+
+        const payload = { 
+          sub: user.id, 
+          email: user.email, 
+        };
 
         return {
-            access_token: this.jwtService.sign(payload),
-        }
+          access_token: this.jwtService.sign(payload),
+        };
     }
 
     async validateUser(email: string, password: string) {

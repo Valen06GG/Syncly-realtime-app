@@ -7,7 +7,10 @@ import { ColumnsModule } from './columns/columns.module';
 import { TasksModule } from './tasks/tasks.module';
 import { SocketsModule } from './sockets/sockets.module';
 import { databaseConfig } from './config/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { config } from 'process';
 
 @Module({
   imports: [
@@ -17,6 +20,14 @@ import { ConfigModule } from '@nestjs/config';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    JwtModule.registerAsync({
+      inject: [ConfigService],
+        useFactory: (config: ConfigService) => ({
+          secret: process.env.JWT_SECRET,
+          signOptions: { expiresIn: '1h' },
+      }),
+    }),
+    PassportModule,
     AuthModule,
     UsersModule,
     BoardsModule,
