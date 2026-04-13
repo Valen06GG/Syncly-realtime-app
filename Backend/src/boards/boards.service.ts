@@ -24,4 +24,22 @@ export class BoardsService {
             where: { ownerId: userId },
         });
     }
+
+    async findOneById(id: string) {
+        return this.boardsRepository.findOne({
+            where: { id },
+        });
+    }
+
+    async findOneByIdAndUser(id: string, userId: string) {
+        const board = await this.boardsRepository.findOne({
+            where: { id, ownerId: userId },
+        });
+
+        if (!board) {
+            throw new Error("Board not found");
+        }
+
+        return board;
+    }
 }

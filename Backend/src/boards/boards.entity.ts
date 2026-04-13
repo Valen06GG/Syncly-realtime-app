@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ColumnEntity } from "src/columns/columns.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Board {
@@ -10,4 +11,7 @@ export class Board {
 
     @Column()
     ownerId: string;
+
+    @OneToMany(() => ColumnEntity, (column) => column.board)
+    columns: ColumnEntity[];
 }

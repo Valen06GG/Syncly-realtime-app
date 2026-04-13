@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { ColumnEntity } from "src/columns/columns.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Task {
@@ -12,8 +13,8 @@ export class Task {
     description: string;
 
     @Column()
-    columnId: string;
-
-    @Column()
     order: number;
+
+    @ManyToOne(() => ColumnEntity,{ onDelete: 'CASCADE', })
+    column: ColumnEntity;
 }

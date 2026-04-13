@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards } from "@nestjs/common";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
 import { ColumnsService } from "./columns.service";
 import { CreateColumnDto } from "./dto/create-column.dto";
@@ -11,8 +11,8 @@ export class ColumnsController {
     ) {}
 
     @Post()
-    create(@Body() dto: CreateColumnDto) {
-        return this.columnsService.create(dto);
+    create(@Body() dto: CreateColumnDto, @Request() req) {
+        return this.columnsService.create(dto, req.user.userId);
     }
 
     @Get(':boardId')

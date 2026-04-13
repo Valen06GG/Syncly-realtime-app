@@ -10,10 +10,10 @@ import { databaseConfig } from './config/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { config } from 'process';
 
 @Module({
   imports: [
+    SocketsModule,
     TypeOrmModule.forRootAsync({
       useFactory: () => databaseConfig,
     }),

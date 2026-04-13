@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Request } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
 import { CreateTaskDto } from "./dto/create-task.dto";
 
@@ -7,8 +7,8 @@ export class TasksController {
     constructor(private tasksService: TasksService) {}
 
     @Post()
-    creeate(@Body() dto: CreateTaskDto) {
-      return this.tasksService.create(dto);
+    creeate(@Body() dto: CreateTaskDto, @Request() req) {
+      return this.tasksService.create(dto, req.user.userId);
     }
 
     @Get(':columnId')
@@ -17,8 +17,8 @@ export class TasksController {
     }
 
     @Patch('move')
-    moveTask(@Body() body: any) {
-      return this.tasksService.moveTask(body);
+    moveTask(@Body() body: any, @Request() req) {
+      return this.tasksService.moveTask(body, req.user.userId);
     }
 
     @Delete(':id')
